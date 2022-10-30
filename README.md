@@ -4,3 +4,7 @@ This README would normally document whatever steps are necessary to get your app
 ### Requirements ###
 * Java environment setup (java 18)
 * IDE setup (Download Intellij Idea)
+
+### Using the formatter ###
+* Use spotless to enforce the Java Google Code format
+* To apply spotless run:`mvn spotless:apply`
