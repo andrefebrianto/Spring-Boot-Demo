@@ -18,3 +18,10 @@ This README would normally document whatever steps are necessary to get your app
 
 ### API document ###
 * Swagger UI document url http://localhost:8080/swagger-ui/index.html
+
+### Deployment ###
+* Setup heroku account and install heroku cli
+* To create the project run:`heroku create spring-boot-demo-<timestamp>`
+* To deploy the project run:
+  * remote to repository:`heroku git:remote -a spring-boot-demo-<timestamp>`
+  * push to master:`git push heroku master`
