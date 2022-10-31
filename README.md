@@ -12,5 +12,9 @@ This README would normally document whatever steps are necessary to get your app
 ### Log file ###
 * Log file can be found at`./logs`
 
+### Database migration ###
+* Migration script can be found at`./src/main/resources/db/migration`
+* Use`v<timestamp>__<description>.sql`naming convention for migration scripts
+
 ### API document ###
 * Swagger UI document url http://localhost:8080/swagger-ui/index.html
