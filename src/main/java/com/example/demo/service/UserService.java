@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.common.constant.UserConstant;
+import com.example.demo.model.entity.Role;
 import com.example.demo.model.entity.User;
+import com.example.demo.model.entity.UserRole;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.UserRoleRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import javax.persistence.EntityExistsException;
@@ -20,6 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     @Autowired private UserRepository userRepository;
+
+    @Autowired private RoleRepository roleRepository;
+
+    @Autowired private UserRoleRepository userRoleRepository;
 
     @Autowired private PasswordEncoder passwordEncoder;
 
@@ -77,5 +85,41 @@ public class UserService {
     public void deleteById(Long id) {
         User user = findById(id);
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public User assignRole(User user, String roleName) {
+        Optional<Role> role = roleRepository.findByName(roleName);
+        if (role.isEmpty()) {
+            throw new EntityNotFoundException("Role not found");
+        }
+
+        UserRole userRole = userRoleRepository.findByUserAndRole(user, role.get());
+        if (userRole != null) {
+            throw new EntityExistsException("User role already exists");
+        }
+
+        userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(role.get());
+        userRoleRepository.save(userRole);
+
+        return findById(user.getId());
+    }
+
+    @Transactional
+    public User unassignRole(User user, String roleName) {
+        Optional<Role> role = roleRepository.findByName(roleName);
+        if (role.isEmpty()) {
+            throw new EntityNotFoundException("Role not found");
+        }
+
+        UserRole userRole = userRoleRepository.findByUserAndRole(user, role.get());
+        if (userRole == null) {
+            throw new EntityNotFoundException("User role not found");
+        }
+
+        userRoleRepository.delete(userRole);
+        return findById(user.getId());
     }
 }

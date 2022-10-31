@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.common.constant.PageConstant;
 import com.example.demo.model.entity.User;
 import com.example.demo.model.mapper.UserMapper;
+import com.example.demo.model.request.RoleRequest;
 import com.example.demo.model.request.UserCreateRequest;
 import com.example.demo.model.request.UserUpdateRequest;
 import com.example.demo.model.response.UserResponse;
@@ -71,6 +72,24 @@ public class UserController {
         User user = userMapper.userUpdateRequestToUser(request);
         user.setId(id);
         user = userService.update(user);
+        UserResponse response = userMapper.userToUserResponse(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/assign-role")
+    public ResponseEntity<UserResponse> assignRole(
+            @PathVariable long id, @Validated @RequestBody RoleRequest request) {
+        User user = userService.findById(id);
+        user = userService.assignRole(user, request.getName());
+        UserResponse response = userMapper.userToUserResponse(user);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/unassign-role")
+    public ResponseEntity<UserResponse> unassignRole(
+            @PathVariable long id, @Validated @RequestBody RoleRequest request) {
+        User user = userService.findById(id);
+        user = userService.unassignRole(user, request.getName());
         UserResponse response = userMapper.userToUserResponse(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

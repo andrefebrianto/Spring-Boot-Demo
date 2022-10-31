@@ -1,6 +1,5 @@
 package com.example.demo.model.response;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,15 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class RoleResponse {
 
     private Long id;
 
-    private String email;
-
-    private String firstName;
-
-    private String lastName;
-
-    public List<RoleResponse> roles;
+    private String name;
 }

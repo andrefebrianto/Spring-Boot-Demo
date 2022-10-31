@@ -1,5 +1,6 @@
 package com.example.demo.model.entity;
 
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import lombok.Getter;
@@ -31,4 +32,11 @@ public class User extends _BaseEntityWithAudit {
 
     @Column(nullable = false)
     private String lastName;
+
+    @ManyToMany
+    @JoinTable(
+            name = "demo_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    public List<Role> roles;
 }
