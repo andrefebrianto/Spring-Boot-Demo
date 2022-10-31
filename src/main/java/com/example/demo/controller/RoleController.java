@@ -8,7 +8,10 @@ import com.example.demo.model.response.RoleResponse;
 import com.example.demo.model.response._MessageSuccessResponse;
 import com.example.demo.model.response._PageResponse;
 import com.example.demo.service.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -22,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Tag(name = "3. Roles")
 @RequestMapping("/api/v1/roles")
 @SecurityRequirement(name = "authorize")
 public class RoleController {
@@ -31,8 +35,10 @@ public class RoleController {
     @Autowired private RoleService roleService;
 
     @GetMapping("/")
+    @Operation(summary = "Get All")
     public ResponseEntity<_PageResponse<RoleResponse>> getAll(
-            @And({
+            @Parameter(example = PageConstant.SAMPLE_ROLE_FILTER)
+                    @And({
                         @Spec(path = "name", spec = LikeIgnoreCase.class),
                         @Spec(path = "isDeleted", spec = Equal.class)
                     })
@@ -47,6 +53,7 @@ public class RoleController {
     }
 
     @PostMapping("/")
+    @Operation(summary = "Create")
     public ResponseEntity<RoleResponse> create(@Validated @RequestBody RoleRequest request) {
         Role role = roleMapper.roleRequestToRole(request);
         role = roleService.create(role);
@@ -56,6 +63,7 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get One")
     public ResponseEntity<RoleResponse> get(@PathVariable long id) {
         Role role = roleService.findById(id);
         RoleResponse response = roleMapper.roleToRoleResponse(role);
@@ -63,6 +71,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update")
     public ResponseEntity<RoleResponse> update(
             @Validated @RequestBody RoleRequest request, @PathVariable long id) {
         Role role = roleMapper.roleRequestToRole(request);
@@ -73,6 +82,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete")
     public ResponseEntity<_MessageSuccessResponse> delete(@PathVariable long id) {
         roleService.deleteById(id);
         return ResponseEntity.ok(new _MessageSuccessResponse("Delete successful"));

@@ -15,6 +15,8 @@ import com.example.demo.model.response.UserResponse;
 import com.example.demo.model.response._MessageSuccessResponse;
 import com.example.demo.service.RefreshTokenService;
 import com.example.demo.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "1. Authentication")
 public class AuthController {
 
     @Autowired private JwtUtil jwtUtil;
@@ -43,6 +46,7 @@ public class AuthController {
     @Autowired private UserService userService;
 
     @PostMapping("/sign-up")
+    @Operation(summary = "Sign Up")
     public ResponseEntity<UserResponse> signup(@Validated @RequestBody AuthSignUpRequest request) {
         User user = userMapper.authSignUpRequestToUser(request);
         user = userService.create(user);
@@ -52,6 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
+    @Operation(summary = "Sign In")
     public ResponseEntity<AuthJwtResponse> signin(@Validated @RequestBody AuthSignInRequest request) {
 
         Authentication authentication =
@@ -70,6 +75,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
+    @Operation(summary = "Regenerate Token")
     public ResponseEntity<AuthRefreshTokenResponse> refreshtoken(
             @Validated @RequestBody AuthRefreshTokenRequest request) {
         String refreshtoken = request.getRefreshToken();
@@ -87,6 +93,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-out")
+    @Operation(summary = "Sign Out")
     public ResponseEntity<_MessageSuccessResponse> signout(
             @Validated @RequestBody AuthRefreshTokenRequest request) {
         String refreshtoken = request.getRefreshToken();

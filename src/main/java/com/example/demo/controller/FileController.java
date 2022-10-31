@@ -9,7 +9,10 @@ import com.example.demo.model.response.FileResponse;
 import com.example.demo.model.response._MessageSuccessResponse;
 import com.example.demo.model.response._PageResponse;
 import com.example.demo.service.FileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@Tag(name = "4. Files")
 @RequestMapping("/api/v1/files")
 @SecurityRequirement(name = "authorize")
 public class FileController {
@@ -37,8 +41,10 @@ public class FileController {
     @Autowired private FileService fileService;
 
     @GetMapping("/")
+    @Operation(summary = "Get All")
     public ResponseEntity<_PageResponse<FileResponse>> getAll(
-            @And({
+            @Parameter(example = PageConstant.SAMPLE_FILE_FILTER)
+                    @And({
                         @Spec(path = "name", spec = LikeIgnoreCase.class),
                         @Spec(path = "type", spec = LikeIgnoreCase.class),
                         @Spec(path = "isDeleted", spec = Equal.class)
@@ -61,6 +67,7 @@ public class FileController {
     }
 
     @GetMapping("/download/{id}")
+    @Operation(summary = "Download")
     public ResponseEntity<byte[]> download(@PathVariable UUID id) {
         File file = fileService.findById(id);
 
@@ -73,6 +80,7 @@ public class FileController {
             path = "/upload",
             method = RequestMethod.POST,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Upload")
     public ResponseEntity<FileResponse> upload(@RequestParam("file") MultipartFile multipartFile) {
         try {
             File file = fileService.upload(multipartFile);
@@ -88,6 +96,7 @@ public class FileController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete")
     public ResponseEntity<_MessageSuccessResponse> delete(@PathVariable UUID id) {
         fileService.deleteById(id);
         return ResponseEntity.ok(new _MessageSuccessResponse("Delete successful"));
