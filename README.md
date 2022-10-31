@@ -8,3 +8,6 @@ This README would normally document whatever steps are necessary to get your app
 ### Using the formatter ###
 * Use spotless to enforce the Java Google Code format
 * To apply spotless run:`mvn spotless:apply`
+
+### Log file ###
+* Log file can be found at`./logs`
