@@ -4,11 +4,10 @@ import com.example.demo.model.entity.RefreshToken;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID> {
+public interface RefreshTokenRepository extends _BaseEntityRepository<RefreshToken, UUID> {
 
     List<RefreshToken> findAllByUserId(Long userId);
 

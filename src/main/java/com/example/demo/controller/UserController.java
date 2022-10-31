@@ -6,9 +6,11 @@ import com.example.demo.model.mapper.UserMapper;
 import com.example.demo.model.request.UserCreateRequest;
 import com.example.demo.model.request.UserUpdateRequest;
 import com.example.demo.model.response.UserResponse;
+import com.example.demo.model.response._MessageSuccessResponse;
 import com.example.demo.model.response._PageResponse;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -34,7 +36,8 @@ public class UserController {
             @And({
                         @Spec(path = "firstName", spec = LikeIgnoreCase.class),
                         @Spec(path = "lastName", spec = LikeIgnoreCase.class),
-                        @Spec(path = "email", spec = LikeIgnoreCase.class)
+                        @Spec(path = "email", spec = LikeIgnoreCase.class),
+                        @Spec(path = "isDeleted", spec = Equal.class)
                     })
                     Specification<User> filter,
             @RequestParam(defaultValue = PageConstant.DEFAULT_PAGE) int page,
@@ -70,5 +73,11 @@ public class UserController {
         user = userService.update(user);
         UserResponse response = userMapper.userToUserResponse(user);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<_MessageSuccessResponse> delete(@PathVariable long id) {
+        userService.deleteById(id);
+        return ResponseEntity.ok(new _MessageSuccessResponse("Delete successful"));
     }
 }

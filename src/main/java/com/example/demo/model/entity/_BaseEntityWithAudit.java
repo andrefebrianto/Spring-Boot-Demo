@@ -24,4 +24,6 @@ public class _BaseEntityWithAudit extends _BaseEntity {
     @LastModifiedBy protected Long updatedBy;
 
     @LastModifiedDate protected LocalDateTime updatedAt;
+
+    protected Boolean isDeleted = Boolean.FALSE;
 }
