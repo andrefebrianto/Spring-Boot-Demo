@@ -89,6 +89,11 @@
 			<version>1.18.24</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>net.kaczmarzyk</groupId>
+			<artifactId>specification-arg-resolver</artifactId>
+			<version>2.7.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
