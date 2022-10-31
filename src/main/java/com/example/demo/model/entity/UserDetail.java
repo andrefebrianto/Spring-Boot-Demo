@@ -1,14 +1,16 @@
 package com.example.demo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
@@ -27,8 +29,12 @@ public class UserDetail implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetail build(User user) {
+        List<GrantedAuthority> authorities =
+                user.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList());
 
-        return new UserDetail(user.getId(), user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new UserDetail(user.getId(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
