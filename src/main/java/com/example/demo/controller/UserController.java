@@ -6,6 +6,7 @@ import com.example.demo.model.request.UserCreateRequest;
 import com.example.demo.model.request.UserUpdateRequest;
 import com.example.demo.model.response.UserResponse;
 import com.example.demo.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@SecurityRequirement(name = "authorize")
 public class UserController {
 
     @Autowired private UserMapper userMapper;

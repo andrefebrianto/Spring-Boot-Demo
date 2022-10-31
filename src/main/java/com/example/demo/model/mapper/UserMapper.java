@@ -1,6 +1,7 @@
 package com.example.demo.model.mapper;
 
 import com.example.demo.model.entity.User;
+import com.example.demo.model.request.AuthSignUpRequest;
 import com.example.demo.model.request.UserCreateRequest;
 import com.example.demo.model.request.UserUpdateRequest;
 import com.example.demo.model.response.UserResponse;
@@ -12,6 +13,9 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
 
     UserMapper instance = Mappers.getMapper(UserMapper.class);
+
+    @Mapping(target = "firstName", source = "firstName")
+    User authSignUpRequestToUser(AuthSignUpRequest source);
 
     @Mapping(target = "firstName", source = "firstName")
     User userCreateRequestToUser(UserCreateRequest source);

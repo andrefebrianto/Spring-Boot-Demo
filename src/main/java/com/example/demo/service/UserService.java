@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     @Autowired private UserRepository userRepository;
+
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Transactional
     public User findById(Long id) {
@@ -40,6 +43,9 @@ public class UserService {
         if (userExists) {
             throw new EntityExistsException("User already exists");
         }
+
+        String password = user.getPassword();
+        user.setPassword(passwordEncoder.encode(password));
 
         user.setCreatedAt(LocalDateTime.now());
         user.setCreatedBy(UserConstant.SYSTEM_USER.getId());
